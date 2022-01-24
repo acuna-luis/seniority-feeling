@@ -31,6 +31,15 @@ public class UserService {
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
+	public String getQuestion(String intent)	{
+		return userRepository.getQuestion(intent);
+	}
+	public String getExpectedResult(String intent, String userId) {
+		return userRepository.getExpectedResult( intent, userId);
+	}
+//	public void updateAnswer(String date,String session, int questionId, String answer, double score) {
+//		userRepository.updateAnswer( date, session, questionId, answer, score);
+//	}
 
 	
 }

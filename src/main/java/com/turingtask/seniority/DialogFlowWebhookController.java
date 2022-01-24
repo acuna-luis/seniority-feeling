@@ -1,7 +1,12 @@
 package com.turingtask.seniority;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +28,11 @@ public class DialogFlowWebhookController {
 	private DialogFlowIntents dialogFlowIntents;
 
 	@RequestMapping(value = "/dialogflow", method = RequestMethod.POST, produces = { "application/json" })
-	String serveAction(@RequestBody String body, @RequestHeader Map<String, String> headers) {
+	String serveAction(@RequestBody String body, @RequestHeader Map<String, String> headers) throws IOException {
 		log.debug(body);
+		FileWriter fw = new FileWriter("/tmp/tmp.json");
+		fw.write(body);
+		fw.close();
 		try {
 			return dialogFlowIntents.handleRequest(body, headers).get();
 		} catch (InterruptedException | ExecutionException e) {
