@@ -42,6 +42,13 @@ public class UserService {
 	public String getExpectedResult(String intent, String userId) {
 		return userRepository.getExpectedResult( intent, userId);
 	}
+	public String getQuestionSum(String sessionId) {
+		return userRepository.getQuestionSum( sessionId);
+	}
+	
+	public String getQuestionSentiment(String sessionId) {
+		return userRepository.getQuestionSentiment( sessionId);
+	}
 	@Transactional
 	public void insertAnswer(String session, String intent, String answer, double score, String identityId) {
 		entityManager.createNativeQuery("INSERT INTO results (date, session, intent, answer, score, identity_id) values (NOW(),?,?,?,?,?)")

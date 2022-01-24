@@ -19,10 +19,11 @@ public interface UserRepository extends JpaRepository<User, String>{
 	@Query("SELECT answer FROM ExpectedResults WHERE intent = :intent and user_id = :userId")
 	String getExpectedResult(@Param("intent") String intent, @Param("userId") String userId);	
 
-	//@Modifying
-	//@Transactional
-	//@Query("INSERT INTO Results (date, session, question_id, answer, score) select :date , :session , :questionId , :answer , :score from dual")
-	//void insertAnswer(String date, String session, int questionId, String answer, double score);
+	@Query("SELECT SUM(score) FROM Results WHERE intent in ('question1','question2','question3','game1','game2' ) and session id = :sessionId")
+	String getQuestionSum(@Param("sessionId") String sessionId);
+
+	@Query("SELECT SUM(score) FROM Results WHERE intent in ('sentiment' ) and session id = :sessionId")
+	String getQuestionSentiment(@Param("sessionId") String sessionId);
 
 
 

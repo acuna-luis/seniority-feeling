@@ -111,7 +111,7 @@ public class DialogFlowIntents extends DialogflowApp {
 
 		try{
 			userService.insertAnswer(
-					request.getSessionId(), "question1", answer, score, "" );
+					request.getSessionId(), "sentiment", answer, percentage, "" );
 			}catch(Exception e){}
 		ResponseBuilder builder;
 		Map<String, String> params = new HashMap<String, String>();
@@ -165,7 +165,6 @@ public class DialogFlowIntents extends DialogflowApp {
 				request.getSessionId(), "question1", answer1, score, identityId );
 		}catch(Exception e){}
 
-		Optional<User> user = userService.findById(identityId);
 		ResponseBuilder builder;
 		String question2 = userService.getQuestion("question2");
 
@@ -245,7 +244,6 @@ public class DialogFlowIntents extends DialogflowApp {
 				request.getSessionId(), "question3", answer, score, identityId );
 		}catch(Exception e){}
 
-		Optional<User> user = userService.findById(identityId);
 		ResponseBuilder builder;
 		String game1 = userService.getQuestion("game1");
 
@@ -317,6 +315,8 @@ public class DialogFlowIntents extends DialogflowApp {
 			score=1;
 			emotionalReaction = "Bien has acertado!!, ";
 		}
+		double suma = Double.parseDouble((String)userService.getQuestionSum(request.getSessionId()));
+		double sentiment = Double.parseDouble((String)userService.getQuestionSentiment(request.getSessionId()));
 		try{
 		userService.insertAnswer(
 				request.getSessionId(), "game2", answer, score, identityId );
@@ -324,13 +324,12 @@ public class DialogFlowIntents extends DialogflowApp {
 
 		
 		ResponseBuilder builder;
-		String game2 = userService.getQuestion("game2");
 
 		Map<String, String> params = new HashMap<String, String>();
 		ActionContext context = new ActionContext("game2-asked", 1);
 		builder = getResponseBuilder(request);
 		builder.add(
-			emotionalReaction+"Ahora dime "+game2);
+			emotionalReaction+"Obtuviste "+suma+" de un total de 5 puntos y con un puntaje de sentimientos del "+sentiment+"%");
 			context.setParameters(params);
 			builder.add(context);
 		ActionResponse actionResponse = builder.build();
