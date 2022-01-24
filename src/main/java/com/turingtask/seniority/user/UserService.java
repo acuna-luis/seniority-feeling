@@ -3,13 +3,18 @@ package com.turingtask.seniority.user;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
 	private UserRepository userRepository;
-
+	@PersistenceContext
+    private EntityManager entityManager;
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
@@ -37,9 +42,16 @@ public class UserService {
 	public String getExpectedResult(String intent, String userId) {
 		return userRepository.getExpectedResult( intent, userId);
 	}
-//	public void updateAnswer(String date,String session, int questionId, String answer, double score) {
-//		userRepository.updateAnswer( date, session, questionId, answer, score);
-//	}
+	@Transactional
+	public void insertAnswer(String session, String intent, String answer, double score, String identityId) {
+		entityManager.createNativeQuery("INSERT INTO results (date, session, intent, answer, score, identity_id) values (NOW(),?,?,?,?,?)")
+		.setParameter(1, session)
+		.setParameter(2, intent)
+		.setParameter(3, answer)
+		.setParameter(4, score)
+		.setParameter(5, identityId)
+		.executeUpdate();
+	}
 
 	
 }

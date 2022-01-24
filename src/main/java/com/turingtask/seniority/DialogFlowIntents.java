@@ -5,9 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -93,9 +95,14 @@ public class DialogFlowIntents extends DialogflowApp {
 		log.debug(requestString);
 		int index = requestString.indexOf("score");
 		log.debug("index: "+index);
+		String scoreString;
+		if(index!=-1){
 		requestString = requestString.substring(index);
-		String scoreString = requestString.substring(requestString.indexOf(" ")+1, requestString.indexOf(","));
+		scoreString = requestString.substring(requestString.indexOf(" ")+1, requestString.indexOf(","));
 		log.debug("scoreString: "+scoreString);
+		}else{
+			scoreString="0";
+		}
 
 		double score = Double.parseDouble(scoreString);
 		log.debug("score: "+score);
@@ -120,33 +127,50 @@ public class DialogFlowIntents extends DialogflowApp {
 	public ActionResponse question1Intent(ActionRequest request) {
 		log.debug(request);
 		// Read request parameter
-		String identityId = (String) request.getParameter("answer1");
+		String identityId = (String) request.getParameter("identityId");
+		log.debug("identityId:");
+		log.debug(identityId);
+		identityId="111122";
+		String okanswer="sabado";
+		Calendar c = Calendar.getInstance();
+		int dia =  c.get(Calendar.DAY_OF_WEEK);
+		if(dia==Calendar.SUNDAY){
+			okanswer="domingo";
+		}if(dia==Calendar.MONDAY){
+		    okanswer="lunes";
+		}if(dia==Calendar.TUESDAY){
+		    okanswer="martes";
+		}if(dia==Calendar.WEDNESDAY){
+			okanswer="miercoles";
+		}if(dia==Calendar.THURSDAY){
+		    okanswer="jueves";
+		}if(dia==Calendar.FRIDAY){
+		    okanswer="viernes";
+		}
+		String answer1=(String)request.getParameter("answer");
+		double score=0;
+		String emotionalReaction = "";
+		if(okanswer.equals(answer1.toLowerCase())){
+			score=1;
+			emotionalReaction = "Bien has acertado!!, ";
+		}
+		try{
+		userService.insertAnswer(
+				request.getSessionId(), "question1", answer1, score, identityId );
+		}catch(Exception e){}
 
 		Optional<User> user = userService.findById(identityId);
 		ResponseBuilder builder;
-		if (user.isPresent()) {
+		String question2 = userService.getQuestion("question2");
 
-			// Write response
-			builder = getResponseBuilder(request);
-			builder.add(
-					"Hola " + user.get().getName() + ". ¿Cómo te sientes hoy?");
-
-			// Set output context and its parameters
-			ActionContext context = new ActionContext("ctx-useridentified", 10);
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("identityId", user.get().getId());
-			params.put("name", user.get().getName());
+		Map<String, String> params = new HashMap<String, String>();
+		ActionContext context = new ActionContext("question2-asked", 1);
+		builder = getResponseBuilder(request);
+		builder.add(
+			emotionalReaction+"Ahora dime "+question2);
 			context.setParameters(params);
 			builder.add(context);
-
-		} else {
-
-			builder = getResponseBuilder(request);
-			builder.add(NO_USER_MSG);
-		}
-
 		ActionResponse actionResponse = builder.build();
-
 		return actionResponse;
 	}
 
@@ -154,33 +178,38 @@ public class DialogFlowIntents extends DialogflowApp {
 	public ActionResponse question2Intent(ActionRequest request) {
 		log.debug(request);
 		// Read request parameter
-		String identityId = (String) request.getParameter("answer2");
+		String identityId = (String) request.getParameter("identityId");
+		log.debug("identityId:");
+		log.debug(identityId);
+		identityId="111122";
+		Calendar c = Calendar.getInstance();
+		int okanswer =  c.get(Calendar.DAY_OF_MONTH);
+		int answer1 = 0;
+		try{
+		    answer1=Integer.parseInt((String)request.getParameter("answer"));
+		}catch(Exception e){}
+		double score=0;
+		String emotionalReaction = "";
+		if(okanswer==answer1){
+			score=1;
+			emotionalReaction = "Bien has acertado!!, ";
+		}
+		try{
+		userService.insertAnswer(
+				request.getSessionId(), "question2", answer1+"", score, identityId );
+		}catch(Exception e){}
 
-		Optional<User> user = userService.findById(identityId);
 		ResponseBuilder builder;
-		if (user.isPresent()) {
+		String question3= userService.getQuestion("question3");
 
-			// Write response
-			builder = getResponseBuilder(request);
-			builder.add(
-					"Hola " + user.get().getName() + ". ¿Cómo te sientes hoy?");
-
-			// Set output context and its parameters
-			ActionContext context = new ActionContext("ctx-useridentified", 10);
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("identityId", user.get().getId());
-			params.put("name", user.get().getName());
+		Map<String, String> params = new HashMap<String, String>();
+		ActionContext context = new ActionContext("question3-asked", 1);
+		builder = getResponseBuilder(request);
+		builder.add(
+			emotionalReaction+"Ahora dime "+question3);
 			context.setParameters(params);
 			builder.add(context);
-
-		} else {
-
-			builder = getResponseBuilder(request);
-			builder.add(NO_USER_MSG);
-		}
-
 		ActionResponse actionResponse = builder.build();
-
 		return actionResponse;
 	}
 
@@ -188,67 +217,78 @@ public class DialogFlowIntents extends DialogflowApp {
 	public ActionResponse question3Intent(ActionRequest request) {
 		log.debug(request);
 		// Read request parameter
-		String identityId = (String) request.getParameter("answer3");
+		String identityId = (String) request.getParameter("identityId");
+		log.debug("identityId:");
+		log.debug(identityId);
+		identityId="111122";
+		String okanswer="";
+		try{
+			okanswer = userService.getExpectedResult("question3", identityId);
+		}catch(Exception e){}
+		log.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX okanswer:");		
+		log.debug(okanswer);		
+		String answer=(String)request.getParameter("answer");
+		double score=0;
+		String emotionalReaction = "";
+		if(okanswer.equals(answer.toLowerCase())){
+			score=1;
+			emotionalReaction = "Bien has acertado!!, ";
+		}
+		try{
+		userService.insertAnswer(
+				request.getSessionId(), "question3", answer, score, identityId );
+		}catch(Exception e){}
 
 		Optional<User> user = userService.findById(identityId);
 		ResponseBuilder builder;
-		if (user.isPresent()) {
+		String game1 = userService.getQuestion("game1");
 
-			// Write response
-			builder = getResponseBuilder(request);
-			builder.add(
-					"Hola " + user.get().getName() + ". ¿Cómo te sientes hoy?");
-
-			// Set output context and its parameters
-			ActionContext context = new ActionContext("ctx-useridentified", 10);
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("identityId", user.get().getId());
-			params.put("name", user.get().getName());
+		Map<String, String> params = new HashMap<String, String>();
+		ActionContext context = new ActionContext("game1-asked", 1);
+		builder = getResponseBuilder(request);
+		builder.add(
+			emotionalReaction+"Un juego: "+game1);
 			context.setParameters(params);
 			builder.add(context);
-
-		} else {
-
-			builder = getResponseBuilder(request);
-			builder.add(NO_USER_MSG);
-		}
-
 		ActionResponse actionResponse = builder.build();
-
 		return actionResponse;
 	}
-
 	@ForIntent("game1")
 	public ActionResponse game1Intent(ActionRequest request) {
 		log.debug(request);
 		// Read request parameter
-		String identityId = (String) request.getParameter("answer4");
+		String identityId = (String) request.getParameter("identityId");
+		log.debug("identityId:");
+		log.debug(identityId);
+		identityId="111122";
+		String okanswer="sabado";
+		
+		log.debug("okanswer:");		
+		log.debug(okanswer);
+		String answer1=(String)request.getParameter("answer");
+		double score=0;
+		String emotionalReaction = "";
+		if(okanswer.equals(answer1.toLowerCase())){
+			score=1;
+			emotionalReaction = "Bien has acertado!!, ";
+		}
+		try{
+		userService.insertAnswer(
+				request.getSessionId(), "question1", answer1, score, identityId );
+		}catch(Exception e){}
 
 		Optional<User> user = userService.findById(identityId);
 		ResponseBuilder builder;
-		if (user.isPresent()) {
+		String question2 = userService.getQuestion("question2");
 
-			// Write response
-			builder = getResponseBuilder(request);
-			builder.add(
-					"Hola " + user.get().getName() + ". ¿Cómo te sientes hoy?");
-
-			// Set output context and its parameters
-			ActionContext context = new ActionContext("ctx-useridentified", 10);
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("identityId", user.get().getId());
-			params.put("name", user.get().getName());
+		Map<String, String> params = new HashMap<String, String>();
+		ActionContext context = new ActionContext("question2-asked", 1);
+		builder = getResponseBuilder(request);
+		builder.add(
+			emotionalReaction+"Ahora dime "+question2);
 			context.setParameters(params);
 			builder.add(context);
-
-		} else {
-
-			builder = getResponseBuilder(request);
-			builder.add(NO_USER_MSG);
-		}
-
 		ActionResponse actionResponse = builder.build();
-
 		return actionResponse;
 	}
 
@@ -256,33 +296,50 @@ public class DialogFlowIntents extends DialogflowApp {
 	public ActionResponse game2Intent(ActionRequest request) {
 		log.debug(request);
 		// Read request parameter
-		String identityId = (String) request.getParameter("answer5");
+		String identityId = (String) request.getParameter("identityId");
+		log.debug("identityId:");
+		log.debug(identityId);
+		identityId="111122";
+		String okanswer="sabado";
+		Calendar c = Calendar.getInstance();
+		int dia =  c.get(Calendar.DAY_OF_WEEK);
+		if(dia==Calendar.SUNDAY){
+			okanswer="domingo";
+		}if(dia==Calendar.MONDAY){
+		    okanswer="lunes";
+		}if(dia==Calendar.TUESDAY){
+		    okanswer="martes";
+		}if(dia==Calendar.WEDNESDAY){
+			okanswer="miercoles";
+		}if(dia==Calendar.THURSDAY){
+		    okanswer="jueves";
+		}if(dia==Calendar.FRIDAY){
+		    okanswer="viernes";
+		}
+		String answer1=(String)request.getParameter("answer");
+		double score=0;
+		String emotionalReaction = "";
+		if(okanswer.equals(answer1.toLowerCase())){
+			score=1;
+			emotionalReaction = "Bien has acertado!!, ";
+		}
+		try{
+		userService.insertAnswer(
+				request.getSessionId(), "question1", answer1, score, identityId );
+		}catch(Exception e){}
 
 		Optional<User> user = userService.findById(identityId);
 		ResponseBuilder builder;
-		if (user.isPresent()) {
+		String question2 = userService.getQuestion("question2");
 
-			// Write response
-			builder = getResponseBuilder(request);
-			builder.add(
-					"Hola " + user.get().getName() + ". ¿Cómo te sientes hoy?");
-
-			// Set output context and its parameters
-			ActionContext context = new ActionContext("ctx-useridentified", 10);
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("identityId", user.get().getId());
-			params.put("name", user.get().getName());
+		Map<String, String> params = new HashMap<String, String>();
+		ActionContext context = new ActionContext("question2-asked", 1);
+		builder = getResponseBuilder(request);
+		builder.add(
+			emotionalReaction+"Ahora dime "+question2);
 			context.setParameters(params);
 			builder.add(context);
-
-		} else {
-
-			builder = getResponseBuilder(request);
-			builder.add(NO_USER_MSG);
-		}
-
 		ActionResponse actionResponse = builder.build();
-
 		return actionResponse;
 	}
 

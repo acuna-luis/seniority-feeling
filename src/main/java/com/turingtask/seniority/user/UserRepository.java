@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, String>{
 	//@Modifying
 	//@Transactional
 	//@Query("INSERT INTO Results (date, session, question_id, answer, score) select :date , :session , :questionId , :answer , :score from dual")
-	//void updateAnswer(String date, String session, int questionId, String answer, double score);
+	//void insertAnswer(String date, String session, int questionId, String answer, double score);
 
 
 
