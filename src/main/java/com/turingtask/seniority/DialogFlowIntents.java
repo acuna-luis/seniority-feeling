@@ -315,13 +315,13 @@ public class DialogFlowIntents extends DialogflowApp {
 			score=1;
 			emotionalReaction = "Bien has acertado!!, ";
 		}
-		double suma = Double.parseDouble((String)userService.getQuestionSum(request.getSessionId()));
-		double sentiment = Double.parseDouble((String)userService.getQuestionSentiment(request.getSessionId()));
 		try{
 		userService.insertAnswer(
 				request.getSessionId(), "game2", answer, score, identityId );
 		}catch(Exception e){}
 
+		double suma = Double.parseDouble((String)userService.getQuestionSum(request.getSessionId()));
+		double sentiment = Double.parseDouble((String)userService.getQuestionSentiment(request.getSessionId()));
 		
 		ResponseBuilder builder;
 
