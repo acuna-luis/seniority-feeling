@@ -107,6 +107,12 @@ public class DialogFlowIntents extends DialogflowApp {
 		double score = Double.parseDouble(scoreString);
 		log.debug("score: "+score);
 		double percentage = Math.round(((score+1)/1.9*100));
+		String answer = (String) request.getParameter("sentimenttext");
+
+		try{
+			userService.insertAnswer(
+					request.getSessionId(), "question1", answer, score, "" );
+			}catch(Exception e){}
 		ResponseBuilder builder;
 		Map<String, String> params = new HashMap<String, String>();
 		ActionContext context = new ActionContext("sentiment-answered", 1);
@@ -261,31 +267,31 @@ public class DialogFlowIntents extends DialogflowApp {
 		log.debug("identityId:");
 		log.debug(identityId);
 		identityId="111122";
-		String okanswer="sabado";
+		String okanswer="26";
 		
 		log.debug("okanswer:");		
 		log.debug(okanswer);
-		String answer1=(String)request.getParameter("answer");
+		String answer=(String)request.getParameter("answer");
 		double score=0;
 		String emotionalReaction = "";
-		if(okanswer.equals(answer1.toLowerCase())){
+		if(okanswer.equals(answer.toLowerCase())){
 			score=1;
 			emotionalReaction = "Bien has acertado!!, ";
 		}
 		try{
 		userService.insertAnswer(
-				request.getSessionId(), "question1", answer1, score, identityId );
+				request.getSessionId(), "game1", answer, score, identityId );
 		}catch(Exception e){}
 
 		Optional<User> user = userService.findById(identityId);
 		ResponseBuilder builder;
-		String question2 = userService.getQuestion("question2");
+		String game2 = userService.getQuestion("game2");
 
 		Map<String, String> params = new HashMap<String, String>();
-		ActionContext context = new ActionContext("question2-asked", 1);
+		ActionContext context = new ActionContext("game2-asked", 1);
 		builder = getResponseBuilder(request);
 		builder.add(
-			emotionalReaction+"Ahora dime "+question2);
+			emotionalReaction+"Ahora dime "+game2);
 			context.setParameters(params);
 			builder.add(context);
 		ActionResponse actionResponse = builder.build();
@@ -300,43 +306,31 @@ public class DialogFlowIntents extends DialogflowApp {
 		log.debug("identityId:");
 		log.debug(identityId);
 		identityId="111122";
-		String okanswer="sabado";
-		Calendar c = Calendar.getInstance();
-		int dia =  c.get(Calendar.DAY_OF_WEEK);
-		if(dia==Calendar.SUNDAY){
-			okanswer="domingo";
-		}if(dia==Calendar.MONDAY){
-		    okanswer="lunes";
-		}if(dia==Calendar.TUESDAY){
-		    okanswer="martes";
-		}if(dia==Calendar.WEDNESDAY){
-			okanswer="miercoles";
-		}if(dia==Calendar.THURSDAY){
-		    okanswer="jueves";
-		}if(dia==Calendar.FRIDAY){
-		    okanswer="viernes";
-		}
-		String answer1=(String)request.getParameter("answer");
+		String okanswer="3";
+		
+		log.debug("okanswer:");		
+		log.debug(okanswer);
+		String answer=(String)request.getParameter("answer");
 		double score=0;
 		String emotionalReaction = "";
-		if(okanswer.equals(answer1.toLowerCase())){
+		if(okanswer.equals(answer.toLowerCase())){
 			score=1;
 			emotionalReaction = "Bien has acertado!!, ";
 		}
 		try{
 		userService.insertAnswer(
-				request.getSessionId(), "question1", answer1, score, identityId );
+				request.getSessionId(), "game2", answer, score, identityId );
 		}catch(Exception e){}
 
-		Optional<User> user = userService.findById(identityId);
+		
 		ResponseBuilder builder;
-		String question2 = userService.getQuestion("question2");
+		String game2 = userService.getQuestion("game2");
 
 		Map<String, String> params = new HashMap<String, String>();
-		ActionContext context = new ActionContext("question2-asked", 1);
+		ActionContext context = new ActionContext("game2-asked", 1);
 		builder = getResponseBuilder(request);
 		builder.add(
-			emotionalReaction+"Ahora dime "+question2);
+			emotionalReaction+"Ahora dime "+game2);
 			context.setParameters(params);
 			builder.add(context);
 		ActionResponse actionResponse = builder.build();
