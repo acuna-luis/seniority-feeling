@@ -320,7 +320,7 @@ public class DialogFlowIntents extends DialogflowApp {
 				request.getSessionId(), "game2", answer, score, identityId );
 		}catch(Exception e){}
 
-		double suma = Double.parseDouble((String)userService.getQuestionSum(request.getSessionId()));
+		double suma = Double.parseDouble((String)userService.getQuestionSum(request.getSessionId()))+score;
 		double sentiment = Double.parseDouble((String)userService.getQuestionSentiment(request.getSessionId()));
 		
 		ResponseBuilder builder;
