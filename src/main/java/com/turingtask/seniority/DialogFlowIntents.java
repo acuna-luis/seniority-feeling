@@ -26,7 +26,10 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.turingtask.seniority.user.User;
 import com.turingtask.seniority.user.UserNotFoundException;
 import com.turingtask.seniority.user.UserService;
+import lombok.extern.log4j.Log4j2;
 
+
+@Log4j2
 @Component
 public class DialogFlowIntents extends DialogflowApp {
 
@@ -43,7 +46,7 @@ public class DialogFlowIntents extends DialogflowApp {
 
 	@ForIntent("identification")
 	public ActionResponse identificateUserIntent(ActionRequest request) {
-
+		log.debug(request);
 		// Read request parameter
 		String identityDocument = (String) request.getParameter("identityId");
 
@@ -105,21 +108,19 @@ public class DialogFlowIntents extends DialogflowApp {
 		ActionResponse actionResponse = builder.build();
 		return actionResponse;
 	}
-
+*/
 	@ForIntent("Solicitar Cita Intent")
 	public ActionResponse queryAvaliabilityIntent(ActionRequest request) {
 
-		LocalDateTime slot = appointmentService.findNextAvailableSlot(AppointmentType.FACE_TO_FACE);
-
 		ResponseBuilder builder = getResponseBuilder(request);
 
-		builder.add("La siguiente fecha disponible es el día " + renderDateTime(slot)
-				+ ". ¿Te gustaría solicitar una cita para ese día?");
+		builder.add("Comenzaremos con algunas preguntas sencillas");
+		builder.add("Qué día de la semana es hoy?");
 
 		// Set output context
-		ActionContext context = new ActionContext("ctx-slotproposed", 5);
+		ActionContext context = new ActionContext("ctx-dayofweekasked", 5);
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("dateTime", slot.format(isoDateFormatter));
+		params.put("lastquestion", "dayofweek");
 		context.setParameters(params);
 		builder.add(context);
 
@@ -127,7 +128,7 @@ public class DialogFlowIntents extends DialogflowApp {
 		return actionResponse;
 
 	}
-
+/*
 	@ForIntent("Solicitar Cita Intent - yes")
 	public ActionResponse confirmAppointmentIntent(ActionRequest request) {
 
