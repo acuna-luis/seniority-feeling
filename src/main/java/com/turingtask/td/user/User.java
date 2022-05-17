@@ -1,4 +1,4 @@
-package com.turingtask.seniority.user;
+package com.turingtask.td.user;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

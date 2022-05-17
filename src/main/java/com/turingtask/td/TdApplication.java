@@ -1,13 +1,13 @@
-package com.turingtask.seniority;
+package com.turingtask.td;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SeniorityApplication {
+public class TdApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SeniorityApplication.class, args);
+		SpringApplication.run(TdApplication.class, args);
 	}
 
 }

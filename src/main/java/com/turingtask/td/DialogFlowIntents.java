@@ -1,4 +1,4 @@
-package com.turingtask.seniority;
+package com.turingtask.td;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,14 +28,10 @@ import com.google.actions.api.response.ResponseBuilder;
 import com.google.api.services.actions_fulfillment.v2.model.Argument;
 import com.google.api.services.dialogflow_fulfillment.v2.model.QueryResult;
 import com.google.gson.internal.LinkedTreeMap;
+import com.turingtask.td.user.User;
+import com.turingtask.td.user.UserNotFoundException;
+import com.turingtask.td.user.UserService;
 
-//import es.uca.spifm.citasapi.appointment.Appointment;
-//import es.uca.spifm.citasapi.appointment.AppointmentNotAvailableException;
-//import es.uca.spifm.citasapi.appointment.AppointmentService;
-//import es.uca.spifm.citasapi.appointment.AppointmentType;
-import com.turingtask.seniority.user.User;
-import com.turingtask.seniority.user.UserNotFoundException;
-import com.turingtask.seniority.user.UserService;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -66,7 +62,7 @@ public class DialogFlowIntents extends DialogflowApp {
 			// Write response
 			builder = getResponseBuilder(request);
 			builder.add(
-					"Hola " + user.get().getName() + ". ¿Cómo te sientes hoy?");
+					"Hola " + user.get().getName() + ". Por favor coméntanos ¿En qué te podemos ayudar?");
 
 			// Set output context and its parameters
 			ActionContext context = new ActionContext("identity-answered", 10);

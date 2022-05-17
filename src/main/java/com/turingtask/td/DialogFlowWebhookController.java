@@ -1,4 +1,4 @@
-package com.turingtask.seniority;
+package com.turingtask.td;
 
 import java.io.FileWriter;
 import java.io.IOException;

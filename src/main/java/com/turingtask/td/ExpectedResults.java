@@ -1,4 +1,4 @@
-package com.turingtask.seniority;
+package com.turingtask.td;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

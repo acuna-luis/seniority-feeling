@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.turingtask.dem</groupId>
-	<artifactId>seniority</artifactId>
+	<artifactId>td</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>seniority</name>
-	<description>Demo project Seniority Feeling</description>
+	<name>td</name>
+	<description>Demo project td Feeling</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
