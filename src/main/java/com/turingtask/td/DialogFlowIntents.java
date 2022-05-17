@@ -117,7 +117,7 @@ public class DialogFlowIntents extends DialogflowApp {
 		String question1 = userService.getQuestion("question1");
 
 		builder.add("Muchas gracias por la informacion, en breve te contactaremos a "+
-		(String) user.get().getName());					
+		(String) user.get().getId());					
 		params.put("SentimentPercentage", percentage+"");
 			context.setParameters(params);
 			builder.add(context);
