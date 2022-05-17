@@ -108,7 +108,7 @@ public class DialogFlowIntents extends DialogflowApp {
 
 		try{
 			userService.insertAnswer(
-					request.getSessionId(), "sentiment", answer, percentage, "" );
+					request.getSessionId(), "sentiment", answer, percentage, (String) user.get().getId());
 			}catch(Exception e){}
 		ResponseBuilder builder;
 		Map<String, String> params = new HashMap<String, String>();
