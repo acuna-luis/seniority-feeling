@@ -108,18 +108,15 @@ public class DialogFlowIntents extends DialogflowApp {
 
 		try{
 			userService.insertAnswer(
-					request.getSessionId(), "sentiment", answer, percentage, (String) user.get().getId());
+					request.getSessionId(), answer, percentage, (String) user.get().getId());
 			}catch(Exception e){}
 		ResponseBuilder builder;
 		Map<String, String> params = new HashMap<String, String>();
 		ActionContext context = new ActionContext("sentiment-answered", 1);
 		builder = getResponseBuilder(request);
-		String question1 = userService.getQuestion("question1");
 
 		builder.add("Muchas gracias por la informacion, en breve te contactaremos a "+
 		(String) user.get().getId());					
-		params.put("SentimentPercentage", percentage+"");
-			context.setParameters(params);
 			builder.add(context);
 		ActionResponse actionResponse = builder.build();
 
