@@ -14,7 +14,7 @@ public class Results {
 	@Column(name="date")
 	private String date;
 
-	@Column(name="question_id")
+	@Column(name="identity_id")
 	private String questionId;
 
 	@Column(name="answer")
