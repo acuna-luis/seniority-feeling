@@ -51,7 +51,7 @@ public class UserService {
 	}
 	@Transactional
 	public void insertAnswer(String session, String answer, double score, String identityId) {
-		entityManager.createNativeQuery("INSERT INTO results (date, session, answer, score, identity_id) values (NOW(),?,?,?,?,?)")
+		entityManager.createNativeQuery("INSERT INTO results (date, session, answer, score, identity_id) values (NOW(),?,?,?,?)")
 		.setParameter(1, session)
 		.setParameter(2, answer)
 		.setParameter(3, score)
