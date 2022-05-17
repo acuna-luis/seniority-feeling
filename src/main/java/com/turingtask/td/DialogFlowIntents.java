@@ -46,6 +46,7 @@ public class DialogFlowIntents extends DialogflowApp {
 
 	@Autowired
 	private UserService userService;
+	Optional<User> user;
 	//@Autowired
 	//private AppointmentService appointmentService;
 
@@ -55,7 +56,7 @@ public class DialogFlowIntents extends DialogflowApp {
 		// Read request parameter
 		String identityId = (String) request.getParameter("identityId");
 
-		Optional<User> user = userService.findById(identityId);
+		user = userService.findById(identityId);
 		ResponseBuilder builder;
 		if (user.isPresent()) {
 
@@ -116,7 +117,7 @@ public class DialogFlowIntents extends DialogflowApp {
 		String question1 = userService.getQuestion("question1");
 
 		builder.add("Muchas gracias por la informacion, en breve te contactaremos a "+
-		(String) request.getParameter("identityId"));					
+		(String) user.get().getName());					
 		params.put("SentimentPercentage", percentage+"");
 			context.setParameters(params);
 			builder.add(context);
