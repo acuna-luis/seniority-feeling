@@ -115,7 +115,8 @@ public class DialogFlowIntents extends DialogflowApp {
 		builder = getResponseBuilder(request);
 		String question1 = userService.getQuestion("question1");
 
-		builder.add("Muchas gracias por la información, en breve te contactaremos a "+(String) request.getParameter("identityId"));					);
+		builder.add("Muchas gracias por la informacion, en breve te contactaremos a "+
+		(String) request.getParameter("identityId"));					
 		params.put("SentimentPercentage", percentage+"");
 			context.setParameters(params);
 			builder.add(context);
